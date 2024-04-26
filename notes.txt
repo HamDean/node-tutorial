@@ -1,0 +1,1 @@
+** Modules -- all files in nodejs app are modules( variables and functions are scoped to that files  )
