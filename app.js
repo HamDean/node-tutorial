@@ -1,11 +1,6 @@
-const EventEmitter = require("events");
+const logger = require('./logger')
+logger.on('messageLogged', (args) => {
+  console.log("event called", args)
+} )
 
-const Logger = require("./logger");
-const logger = new Logger();
-
-logger.on("messageLogged", (args) => {
-  console.log("Listener called", args);
-});
-
-logger.log("message");
-
+logger.log('message')
