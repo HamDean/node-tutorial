@@ -1,6 +1,13 @@
-const logger = require('./logger')
-logger.on('messageLogged', (args) => {
-  console.log("event called", args)
-} )
+const http = require('http')
 
-logger.log('message')
+const server = http.createServer((req, res) => {
+  if(req.url === '/'){
+    res.write('hello world')
+    res.end()
+  }
+})
+
+
+server.listen(3000)
+
+console.log('listening on port 3000')
