@@ -5,5 +5,5 @@ const searchUpdate = (file) => {
   console.log("update available for", file);
 }
 
-module.exports.searchUpdate = searchUpdate; // exporting an object
-//* module.exports = searchUpdate ---> exporting just the searchUpdate function
+// module.exports.searchUpdate = searchUpdate; // exporting an object
+module.exports = searchUpdate
