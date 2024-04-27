@@ -1,2 +1,3 @@
 ** Modules -- all files in nodejs app are modules( variables and functions are scoped to that files  )
 - use require() to load modules 
+- node does not execute our code directly, wraps them in 'module wrapper function'
