@@ -10,6 +10,18 @@ const courses = [
   { id: 11, title: "a" },
 ];
 
+const validateReqBody = (req) => {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+  });
+
+  return schema.validate(req.body);
+};
+
+const lookUpCourse = (id) => {
+  return courses.find((c) => c.id === parseInt(req.params.id));
+};
+
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
@@ -19,21 +31,16 @@ app.get("/api/courses", (req, res) => {
 });
 
 app.get("/api/courses/:id", (req, res) => {
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  const course = lookUpCourse(req.params.id);
   if (!course) res.status(404).send("Could not find course :(");
   res.send(course);
 });
 
 app.post("/api/courses", (req, res) => {
-  const schema = Joi.object({
-    title: Joi.string().required(),
-  });
+  const {error} = validateReqBody(req);
 
-  const result = schema.validate(req.body)
-  console.log(result)
-
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
+  if (error) {
+    res.status(400).send(error.details[0].message);
     return;
   }
 
@@ -42,6 +49,22 @@ app.post("/api/courses", (req, res) => {
     title: req.body.title,
   };
   courses.push(course);
+  res.send(course);
+});
+
+app.put("/api/courses/:id", (req, res) => {
+  const course = lookUpCourse(req.params.id);
+  if (!course) res.status(404).send("Could not find course :(");
+
+  const { error } = validateReqBody(req);
+
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  course.title = req.body.title;
+
   res.send(course);
 });
 
