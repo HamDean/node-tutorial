@@ -10,7 +10,7 @@ const courses = [
   { id: 11, title: "a" },
 ];
 
-const validateReqBody = (req) => {
+const validateCourse = (req) => {
   const schema = Joi.object({
     title: Joi.string().required(),
   });
@@ -19,7 +19,7 @@ const validateReqBody = (req) => {
 };
 
 const lookUpCourse = (id) => {
-  return courses.find((c) => c.id === parseInt(req.params.id));
+  return courses.find((c) => c.id === parseInt(id));
 };
 
 app.get("/", (req, res) => {
@@ -37,12 +37,9 @@ app.get("/api/courses/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  const {error} = validateReqBody(req);
+  const { error } = validateCourse(req);
 
-  if (error) {
-    res.status(400).send(error.details[0].message);
-    return;
-  }
+  if (error) return res.status(400).send(error.details[0].message);
 
   const course = {
     id: courses.length + 1,
@@ -56,18 +53,23 @@ app.put("/api/courses/:id", (req, res) => {
   const course = lookUpCourse(req.params.id);
   if (!course) res.status(404).send("Could not find course :(");
 
-  const { error } = validateReqBody(req);
+  const { error } = validateCourse(req);
 
-  if (error) {
-    res.status(400).send(error.details[0].message);
-    return;
-  }
+  if (error) return res.status(400).send(error.details[0].message);
 
   course.title = req.body.title;
 
   res.send(course);
 });
 
-console.log(courses);
+app.delete("/api/courses/:id", (req, res) => {
+  const course = lookUpCourse(req.params.id);
+
+  if (!course) return res.status(404).send("Could not find course :(");
+
+  const newCourses = courses.filter((c) => c.id !== course.id);
+
+  res.send(newCourses);
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));
