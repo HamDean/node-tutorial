@@ -1,7 +1,8 @@
 const express = require("express");
+const Joi = require("joi");
 const app = express();
 const port = process.env.PORT || 4000;
-app.use(express.json())
+app.use(express.json());
 
 const courses = [
   { id: 2, title: "a" },
@@ -20,18 +21,30 @@ app.get("/api/courses", (req, res) => {
 app.get("/api/courses/:id", (req, res) => {
   const course = courses.find((c) => c.id === parseInt(req.params.id));
   if (!course) res.status(404).send("Could not find course :(");
-  res.send(course)
+  res.send(course);
 });
 
 app.post("/api/courses", (req, res) => {
-    const course = {
-        id: courses.length + 1,
-        title: req.body.title
-    }
-    courses.push(course)
-    res.send(course)
-})
+  const schema = Joi.object({
+    title: Joi.string().required(),
+  });
 
-console.log(courses)
+  const result = schema.validate(req.body)
+  console.log(result)
+
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+
+  const course = {
+    id: courses.length + 1,
+    title: req.body.title,
+  };
+  courses.push(course);
+  res.send(course);
+});
+
+console.log(courses);
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));
