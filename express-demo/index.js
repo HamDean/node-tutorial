@@ -1,6 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const logger = require("./logger");
+const morgan = require("morgan");
 const authenticator = require("./authenticator");
 const app = express();
 const port = process.env.PORT || 4000;
@@ -13,6 +14,8 @@ app.use(express.static("public"));
 
 //* parsing url encoded request
 app.use(express.urlencoded({ extended: true }));
+
+app.use(morgan('short'));
 
 app.use(logger);
 
