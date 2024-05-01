@@ -15,7 +15,10 @@ app.use(express.static("public"));
 //* parsing url encoded request
 app.use(express.urlencoded({ extended: true }));
 
-app.use(morgan('short'));
+if(app.get('env') === 'development'){
+  app.use(morgan('short'));
+  console.log('---: Morgan enabled')
+}
 
 app.use(logger);
 
