@@ -1,8 +1,22 @@
 const express = require("express");
 const Joi = require("joi");
+const logger = require("./logger");
+const authenticator = require("./authenticator");
 const app = express();
 const port = process.env.PORT || 4000;
+
+//* populating request body as json
 app.use(express.json());
+
+//* serving static files
+app.use(express.static("public"));
+
+//* parsing url encoded request
+app.use(express.urlencoded({ extended: true }));
+
+app.use(logger);
+
+app.use(authenticator);
 
 const courses = [
   { id: 2, title: "a" },
