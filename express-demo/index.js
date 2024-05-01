@@ -2,6 +2,7 @@ const express = require("express");
 const Joi = require("joi");
 const logger = require("./logger");
 const morgan = require("morgan");
+const config = require('config')
 const authenticator = require("./authenticator");
 const app = express();
 const port = process.env.PORT || 4000;
@@ -15,13 +16,17 @@ app.use(express.static("public"));
 //* parsing url encoded request
 app.use(express.urlencoded({ extended: true }));
 
-if(app.get('env') === 'development'){
-  app.use(morgan('short'));
+
+//* configuration
+console.log(`Application name ${config.get("name")}`)
+console.log(`Mail server ${config.get("mail.host")}`)
+// console.log(`Mail Password ${config.get("mail.password")}`)
+
+if(process.env.NODE_ENV === 'development'){
+  app.use(morgan('tiny'));
   console.log('---: Morgan enabled')
 }
-
 app.use(logger);
-
 app.use(authenticator);
 
 const courses = [
