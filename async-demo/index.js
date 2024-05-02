@@ -1,12 +1,14 @@
 console.log("Before");
 
 fetchUser(1, (user) => {
-  fetchReposities(user.userName, (repos) => {
-    console.log("Repositories:", repos);
-  });
+  fetchReposities(user.userName,displayRepos);
 });
 
 console.log("After");
+
+function displayRepos(repos){
+    console.log("Repositories:", repos);
+}
 
 function fetchUser(id, callback) {
   setTimeout(() => {
