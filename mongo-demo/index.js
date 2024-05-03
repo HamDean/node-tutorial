@@ -10,19 +10,24 @@ const schema = new mongoose.Schema({
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
-  isPublished: Boolean
+  isPublished: Boolean,
 });
-const Course = mongoose.model('Course', schema)
+const Course = mongoose.model("Course", schema);
 async function createCourse() {
-    const course = new Course({
-        title: 'Nodjs',
-        author: 'Hamzah', 
-        tags: ['node', 'backend'],
-        isPublished: true
-    })
-    await course.save()
+  const course = new Course({
+    title: "Nodjs",
+    author: "Hamzah",
+    tags: ["node", "backend"],
+    isPublished: true,
+  });
+  await course.save();
 }
 
-createCourse()
-
-console.log(Course.find({ title: 'Nodejs' }))
+async function getCourses() {
+  const courses = await Course.find()
+  .limit(10)
+  .sort({ title: -1 })
+  .select({ title: 1, tags: 1 })
+  console.log("All courses:", courses);
+}
+getCourses();
