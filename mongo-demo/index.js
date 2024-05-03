@@ -29,9 +29,9 @@ async function createCourse() {
 
 async function getCourses() {
   const courses = await Course.find()
+    .or([{ isPublished: true }, { author: "Hamzah" }])
     .limit(10)
     .sort({ title: -1 })
-    .select({ title: 1, tags: 1 });
   console.log("All courses:", courses);
 }
 getCourses();
