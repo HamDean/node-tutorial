@@ -23,9 +23,16 @@ async function createCourse() {
   await course.save();
 }
 
+// comparison operators
 //* gt, gte, lt, lte, in, nin,
 //* price: { $in: [10, 23, 60] }
 //* { price: {$gte: 10, $lte: 20 } }
+
+// regex
+//* /pattern/ 
+//* /^ham/i ---> begins with ham and is case-insensitive
+//* /Nurudeen$/ --> ends with Nurudeen
+//* /.*mza.*/ ---> contains mza, letters can come before or after
 
 async function getCourses() {
   const courses = await Course.find()
