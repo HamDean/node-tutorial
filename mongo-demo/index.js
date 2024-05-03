@@ -23,11 +23,15 @@ async function createCourse() {
   await course.save();
 }
 
+//* gt, gte, lt, lte, in, nin,
+//* price: { $in: [10, 23, 60] }
+//* { price: {$gte: 10, $lte: 20 } }
+
 async function getCourses() {
   const courses = await Course.find()
-  .limit(10)
-  .sort({ title: -1 })
-  .select({ title: 1, tags: 1 })
+    .limit(10)
+    .sort({ title: -1 })
+    .select({ title: 1, tags: 1 });
   console.log("All courses:", courses);
 }
 getCourses();
