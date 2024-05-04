@@ -45,4 +45,15 @@ async function getCourses() {
     .sort({ title: -1 });
   console.log("All courses:", courses);
 }
-getCourses();
+
+async function updateCourse(id) {
+  const course = await Course.findById(id);
+  if (!course) return;
+
+  (course.author = "Another author"), (course.isPublished = false);
+
+  await course.save();
+  //console.log(result);
+}
+
+updateCourse("5a68fdd7bee8ea64649c2777");

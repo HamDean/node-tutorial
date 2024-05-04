@@ -27,4 +27,17 @@ async function getCourses() {
   console.log(courses);
 }
 
-getCourses();
+// getCourses();
+
+async function updateCourse(id) {
+  console.log("courseId:", id);
+
+  try {
+    const course = await Course.findById(id);
+    console.log("course:", course);
+  } catch (err) {
+    console.log("error:", err);
+  }
+}
+
+updateCourse("5a68fdc3615eda645bc6bdec");
