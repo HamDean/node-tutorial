@@ -27,6 +27,7 @@ async function run() {
 
 // run()
 
+//*  query firt approach
 async function updateCourse(id) {
   try {
     const course = await Course.findById(id);
@@ -41,4 +42,15 @@ async function updateCourse(id) {
   }
 }
 
-updateCourse("6634d904659e1383e38d3414");
+//* document update approach
+async function updateCourseDA(id) {
+  const course = await Course.findByIdAndUpdate(id, {
+    $set: {
+      author: "dean?",
+      isPublished: true,
+    },
+  }, { new: true});
+  console.log(course);
+}
+
+updateCourseDA("6634d904659e1383e38d3414");
