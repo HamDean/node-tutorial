@@ -6,13 +6,14 @@ mongoose
   .catch((err) => console.log("could not connect to mongodb :(", err));
 
 const schema = new mongoose.Schema({
-  title: String,
+  title: { type: String, required: true },
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
 });
 const Course = mongoose.model("Course", schema);
+
 async function createCourse() {
   const course = new Course({
     title: "Nodjs",
@@ -20,7 +21,11 @@ async function createCourse() {
     tags: ["node", "backend"],
     isPublished: true,
   });
-  await course.save();
+  try {
+    await course.save();
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 // comparison operators
@@ -56,4 +61,3 @@ async function updateCourse(id) {
   //console.log(result);
 }
 
-updateCourse("5a68fdd7bee8ea64649c2777");
