@@ -1,43 +1,44 @@
 const mongoose = require("mongoose");
 
-mongoose
-  .connect("mongodb://localhost:27017/mongo-exercises")
-  .then(() => console.log("Connected successfully..."))
-  .catch((err) => console.log("Could not connect :(", err));
+mongoose.connect("mongodb://localhost/playground");
 
-const schema = new mongoose.Schema({
-  tags: [String],
-  date: {
-    type: Date,
-    default: Date.now,
-  },
+const courseSchema = new mongoose.Schema({
   name: String,
   author: String,
+  tags: [String],
+  date: Date,
+  isPublished: Boolean,
   price: Number,
 });
 
-const Course = mongoose.model("Course", schema);
+const Course = mongoose.model("Course", courseSchema);
 
 async function getCourses() {
-  const courses = await Course.find()
-    .or([{ price: { $gte: 15 } }, { name: /.*by.*/ }])
+  return await Course.find({ isPublished: true })
+    .or([{ tags: "frontend" }, { tags: "backend" }])
     .sort("-price")
-    .select("name price");
+    .select("name author price");
+}
 
+async function run() {
+  const courses = await getCourses();
   console.log(courses);
 }
 
-// getCourses();
+// run()
 
 async function updateCourse(id) {
-  console.log("courseId:", id);
-
   try {
     const course = await Course.findById(id);
-    console.log("course:", course);
+    if (!course) return;
+    course.name = "Another author";
+    course.isPublished = false;
+
+    const result = await course.save();
+    console.log(result);
   } catch (err) {
     console.log("error:", err);
   }
 }
 
-updateCourse("5a68fdc3615eda645bc6bdec");
+updateCourse("6634d904659e1383e38d3414");
