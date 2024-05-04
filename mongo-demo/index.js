@@ -29,16 +29,20 @@ async function createCourse() {
 //* { price: {$gte: 10, $lte: 20 } }
 
 // regex
-//* /pattern/ 
+//* /pattern/
 //* /^ham/i ---> begins with ham and is case-insensitive
 //* /Nurudeen$/ --> ends with Nurudeen
 //* /.*mza.*/ ---> contains mza, letters can come before or after
 
 async function getCourses() {
+  const pageNumber = 2;
+  const pageSize = 10;
+
   const courses = await Course.find()
     .or([{ isPublished: true }, { author: "Hamzah" }])
-    .limit(10)
-    .sort({ title: -1 })
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize)
+    .sort({ title: -1 });
   console.log("All courses:", courses);
 }
 getCourses();
