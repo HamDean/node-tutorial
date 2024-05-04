@@ -6,8 +6,12 @@ mongoose
   .catch((err) => console.log("could not connect to mongodb :(", err));
 
 const schema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: true, minlength: 3, maxlength: 50 },
   author: String,
+  category: {
+    type: String,
+    enum: ["frontend", "backend", "fullstack"],
+  },
   tags: [String],
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
@@ -20,6 +24,7 @@ async function createCourse() {
     author: "Hamzah",
     tags: ["node", "backend"],
     isPublished: true,
+    category: 'mobile'
   });
   try {
     await course.save();
@@ -60,4 +65,4 @@ async function updateCourse(id) {
   await course.save();
   //console.log(result);
 }
-
+createCourse();
