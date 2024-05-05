@@ -12,7 +12,15 @@ const schema = new mongoose.Schema({
     type: String,
     enum: ["frontend", "backend", "fullstack"],
   },
-  tags: [String],
+  tags:{
+    type: Array,
+    validate: {
+      validator: function(v){
+        return v && v.length > 0
+      },
+      message: "Tag must contain at least one value"
+    }
+  },
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
 });
@@ -24,7 +32,6 @@ async function createCourse() {
     author: "Hamzah",
     tags: ["node", "backend"],
     isPublished: true,
-    category: 'mobile'
   });
   try {
     await course.save();
