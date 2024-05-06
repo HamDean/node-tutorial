@@ -12,14 +12,20 @@ const schema = new mongoose.Schema({
     type: String,
     enum: ["frontend", "backend", "fullstack"],
   },
-  tags:{
+  tags: {
     type: Array,
     validate: {
-      validator: function(v){
-        return v && v.length > 0
+      isAsync: true,
+      validator: function (v) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const result = v && v.length > 0;
+            resolve(result);
+          }, 1000);
+        });
       },
-      message: "Tag must contain at least one value"
-    }
+      message: "Tag must contain at least one value",
+    },
   },
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
@@ -30,7 +36,7 @@ async function createCourse() {
   const course = new Course({
     title: "Nodjs",
     author: "Hamzah",
-    tags: ["node", "backend"],
+    // tags: ["node", "backend"],
     isPublished: true,
   });
   try {
@@ -39,17 +45,6 @@ async function createCourse() {
     console.log(error.message);
   }
 }
-
-// comparison operators
-//* gt, gte, lt, lte, in, nin,
-//* price: { $in: [10, 23, 60] }
-//* { price: {$gte: 10, $lte: 20 } }
-
-// regex
-//* /pattern/
-//* /^ham/i ---> begins with ham and is case-insensitive
-//* /Nurudeen$/ --> ends with Nurudeen
-//* /.*mza.*/ ---> contains mza, letters can come before or after
 
 async function getCourses() {
   const pageNumber = 2;
@@ -73,3 +68,14 @@ async function updateCourse(id) {
   //console.log(result);
 }
 createCourse();
+
+// comparison operators
+//* gt, gte, lt, lte, in, nin,
+//* price: { $in: [10, 23, 60] }
+//* { price: {$gte: 10, $lte: 20 } }
+
+// regex
+//* /pattern/
+//* /^ham/i ---> begins with ham and is case-insensitive
+//* /Nurudeen$/ --> ends with Nurudeen
+//* /.*mza.*/ ---> contains mza, letters can come before or after
