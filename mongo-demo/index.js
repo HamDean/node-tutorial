@@ -36,13 +36,14 @@ async function createCourse() {
   const course = new Course({
     title: "Nodjs",
     author: "Hamzah",
+    category: "-",
     // tags: ["node", "backend"],
     isPublished: true,
   });
   try {
     await course.save();
   } catch (error) {
-    console.log(error.message);
+    console.log(error.errors.category.properties.message);
   }
 }
 
